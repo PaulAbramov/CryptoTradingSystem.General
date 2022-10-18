@@ -116,7 +116,7 @@ namespace CryptoTradingSystem.General.Database
             }
             catch (Exception e)
             {
-                Log.Error(e, "{asset} | {timeFrame} | {indicator} | {lastClose} | could not get candles from Database", _asset.GetStringValue(), _timeFrame.GetStringValue(), _indicator.GetStringValue(), _lastCloseTime);
+                Log.Error("{asset} | {timeFrame} | {indicator} | {lastClose} | could not get candles from Database", _asset.GetStringValue(), _timeFrame.GetStringValue(), _indicator.GetStringValue(), _lastCloseTime);
                 throw;
             }
 

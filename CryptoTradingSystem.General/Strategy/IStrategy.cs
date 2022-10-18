@@ -2,6 +2,6 @@
 {
     public interface IStrategy
     {
-        string ExecuteStrategy(string _connectionString, string _logFile);
+        string ExecuteStrategy(string _connectionString);
     }
 }
