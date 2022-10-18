@@ -11,10 +11,9 @@
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="8.0.29" />
     <PackageReference Include="MySql.EntityFrameworkCore" Version="5.0.13" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Database\Interfaces\" />
+    <PackageReference Include="Serilog" Version="2.11.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

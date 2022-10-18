@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
+
+using Serilog;
 
 namespace CryptoTradingSystem.General.Helper
 {
@@ -31,6 +34,11 @@ namespace CryptoTradingSystem.General.Helper
                 }
                 catch (Exception ex)
                 {
+                    if(attempted == _maxAttemptCount)
+                    {
+                        Log.Warning("Run {attempt}/{maxAttempts} failed. action: {action}.", attempted, _maxAttemptCount, _action.GetMethodInfo().Name.Substring(1, _action.GetMethodInfo().Name.IndexOf(">") - 1));
+                    }
+
                     exceptions.Add(ex);
                 }
             }
