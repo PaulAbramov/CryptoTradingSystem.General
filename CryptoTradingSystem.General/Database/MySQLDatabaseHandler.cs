@@ -69,7 +69,8 @@ namespace CryptoTradingSystem.General.Database
             }
             else
             {
-                Log.Warning("{asset} | {timeFrame} | {indicator} | {lastClose} | timeframe could not be translated",
+                Log.Warning(
+                    "{asset} | {timeFrame} | {indicator} | {lastClose} | timeframe could not be translated",
                     _asset.GetStringValue(),
                     _timeFrame.GetStringValue(),
                     _indicator.GetStringValue(),
@@ -133,7 +134,8 @@ namespace CryptoTradingSystem.General.Database
             }
             catch (Exception e)
             {
-                Log.Error("{asset} | {timeFrame} | {indicator} | {lastClose} | could not get candles from Database", 
+                Log.Error(
+                    "{asset} | {timeFrame} | {indicator} | {lastClose} | could not get candles from Database", 
                     _asset.GetStringValue(), 
                     _timeFrame.GetStringValue(), 
                     _indicator.GetStringValue(), 

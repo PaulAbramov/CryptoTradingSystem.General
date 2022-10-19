@@ -36,7 +36,21 @@ namespace CryptoTradingSystem.General.Helper
                 {
                     if(attempted == _maxAttemptCount - 1)
                     {
-                        Log.Warning("Run {attempt}/{maxAttempts} failed. action: {action}.", attempted + 1, _maxAttemptCount, _action.GetMethodInfo().Name.Substring(1, _action.GetMethodInfo().Name.IndexOf(">") - 1));
+                        Log.Warning(
+                            ex,
+                            "Run {attempt}/{maxAttempts} failed. action: {action}.", 
+                            attempted + 1, 
+                            _maxAttemptCount, 
+                            _action.GetMethodInfo().Name[1.._action.GetMethodInfo().Name.IndexOf(">")]);
+                    }
+                    else
+                    {
+                        Log.Debug(
+                            ex, 
+                            "Run {attempt}/{maxAttempts} failed. action: {action}.",
+                            attempted + 1,
+                            _maxAttemptCount,
+                            _action.GetMethodInfo().Name[1.._action.GetMethodInfo().Name.IndexOf(">")]);
                     }
 
                     exceptions.Add(ex);
