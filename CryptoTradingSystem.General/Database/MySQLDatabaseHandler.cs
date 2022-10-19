@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using CryptoTradingSystem.General.Data;
 using CryptoTradingSystem.General.Database.Interfaces;
 using CryptoTradingSystem.General.Database.Models;
+
 using Microsoft.EntityFrameworkCore;
+
 using Serilog;
 
 namespace CryptoTradingSystem.General.Database
@@ -20,8 +23,6 @@ namespace CryptoTradingSystem.General.Database
                 .WriteTo.Console()
                 .WriteTo.File("logs/General.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
-
-            Log.Information("static MySQLDatabaseHandler Constructor executed");
         }
 
         public MySQLDatabaseHandler(string _connectionString)
@@ -39,7 +40,13 @@ namespace CryptoTradingSystem.General.Database
         /// <param name="_lastCloseTime"></param>
         /// <param name="_amount"></param>
         /// <returns></returns>
-        public List<T> GetIndicators<T>(Enums.Assets _asset, Enums.TimeFrames _timeFrame, Enums.Indicators _indicator, DateTime _lastCloseTime = new DateTime(), int _amount = 500) where T : Indicator
+        public List<T> GetIndicators<T>(
+            Enums.Assets _asset,
+            Enums.TimeFrames _timeFrame,
+            Enums.Indicators _indicator,
+            DateTime _lastCloseTime = new DateTime(),
+            int _amount = 500)
+            where T : Indicator
         {
             var returnList = new List<T>();
             int currentYear = DateTime.Now.Year;
@@ -62,7 +69,12 @@ namespace CryptoTradingSystem.General.Database
             }
             else
             {
-                Log.Warning("{asset} | {timeFrame} | {indicator} | {lastClose} | timeframe could not be translated", _asset.GetStringValue(), _timeFrame.GetStringValue(), _indicator.GetStringValue(), _lastCloseTime);
+                Log.Warning("{asset} | {timeFrame} | {indicator} | {lastClose} | timeframe could not be translated",
+                    _asset.GetStringValue(),
+                    _timeFrame.GetStringValue(),
+                    _indicator.GetStringValue(),
+                    _lastCloseTime);
+
                 return returnList;
             }
 
@@ -81,7 +93,10 @@ namespace CryptoTradingSystem.General.Database
 
                     var dbset = (DbSet<T>)property.GetValue(contextDB);
 
-                    var indicatorsToCheck = dbset.Where(x => x.AssetName == _asset.GetStringValue() && x.Interval == _timeFrame.GetStringValue() && x.CloseTime >= _lastCloseTime).OrderBy(x => x.CloseTime).Take(_amount);
+                    var indicatorsToCheck = dbset
+                        .Where(x => x.AssetName == _asset.GetStringValue() && x.Interval == _timeFrame.GetStringValue() && x.CloseTime >= _lastCloseTime)
+                        .OrderBy(x => x.CloseTime)
+                        .Take(_amount);
 
                     DateTime previousCandle = DateTime.MinValue;
                     foreach (var indicator in indicatorsToCheck)
@@ -92,8 +107,10 @@ namespace CryptoTradingSystem.General.Database
                         if (previousCandle != DateTime.MinValue)
                         {
                             bool gap = (indicator.CloseTime - previousCandle) > timeFrame;
-                            if (gap && indicator.CloseTime.Year == currentYear && indicator.CloseTime.Month == currentMonth &&
-                                        (previousCandle.Year != currentYear || previousCandle.Month != currentMonth))
+                            if (gap 
+                                && indicator.CloseTime.Year == currentYear 
+                                && indicator.CloseTime.Month == currentMonth 
+                                && (previousCandle.Year != currentYear || previousCandle.Month != currentMonth))
                             {
                                 break;
                             }
@@ -101,8 +118,8 @@ namespace CryptoTradingSystem.General.Database
                         else
                         {
                             // Do not allow to calculate indicators if we do not have data from the past
-                            if (indicator.CloseTime.Year == currentYear && (indicator.CloseTime.Month == currentMonth ||
-                                                                            indicator.CloseTime.Month == currentMonth - 1))
+                            if (indicator.CloseTime.Year == currentYear 
+                                && (indicator.CloseTime.Month == currentMonth || indicator.CloseTime.Month == currentMonth - 1))
                             {
                                 break;
                             }
@@ -116,7 +133,11 @@ namespace CryptoTradingSystem.General.Database
             }
             catch (Exception e)
             {
-                Log.Error("{asset} | {timeFrame} | {indicator} | {lastClose} | could not get candles from Database", _asset.GetStringValue(), _timeFrame.GetStringValue(), _indicator.GetStringValue(), _lastCloseTime);
+                Log.Error("{asset} | {timeFrame} | {indicator} | {lastClose} | could not get candles from Database", 
+                    _asset.GetStringValue(), 
+                    _timeFrame.GetStringValue(), 
+                    _indicator.GetStringValue(), 
+                    _lastCloseTime);
                 throw;
             }
 
