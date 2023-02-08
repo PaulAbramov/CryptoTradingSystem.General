@@ -31,7 +31,7 @@
             [StringValue("SMA")]
             SMA,
             [StringValue("ATR")]
-            ATR,
+            ATR
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     public interface IStrategy
     {
-        string ExecuteStrategy(string _connectionString);
+        StrategyParameter SetupStrategyParameter();
+        string ExecuteStrategy();
     }
 }
