@@ -9,39 +9,39 @@ namespace CryptoTradingSystem.General.Helper
 {
     public static class Retry
     {
-        public static void Do(Action _action, TimeSpan _retryInterval, int _maxAttemptCount = 10)
+        public static void Do(Action action, TimeSpan retryInterval, int maxAttemptCount = 10)
         {
             Do<object>(() =>
             {
-                _action();
+                action();
                 return null;
-            }, _retryInterval, _maxAttemptCount);
+            }, retryInterval, maxAttemptCount);
         }
 
-        public static T Do<T>(Func<T> _action, TimeSpan _retryInterval, int _maxAttemptCount = 10)
+        public static T Do<T>(Func<T> action, TimeSpan retryInterval, int maxAttemptCount = 10)
         {
             var exceptions = new List<Exception>();
 
-            for (int attempted = 0; attempted < _maxAttemptCount; attempted++)
+            for (int attempted = 0; attempted < maxAttemptCount; attempted++)
             {
                 try
                 {
                     if (attempted > 0)
                     {
-                        Task.Delay(_retryInterval).GetAwaiter().GetResult();
+                        Task.Delay(retryInterval).GetAwaiter().GetResult();
                     }
-                    return _action();
+                    return action();
                 }
                 catch (Exception ex)
                 {
-                    if(attempted == _maxAttemptCount - 1)
+                    if(attempted == maxAttemptCount - 1)
                     {
                         Log.Warning(
                             ex,
                             "Run {attempt}/{maxAttempts} failed. action: {action}.", 
-                            attempted + 1, 
-                            _maxAttemptCount, 
-                            _action.GetMethodInfo().Name[1.._action.GetMethodInfo().Name.IndexOf(">")]);
+                            attempted + 1,
+                            maxAttemptCount,
+                            action.GetMethodInfo().Name[1..action.GetMethodInfo().Name.IndexOf(">")]);
                     }
                     else
                     {
@@ -49,8 +49,8 @@ namespace CryptoTradingSystem.General.Helper
                             ex, 
                             "Run {attempt}/{maxAttempts} failed. action: {action}.",
                             attempted + 1,
-                            _maxAttemptCount,
-                            _action.GetMethodInfo().Name[1.._action.GetMethodInfo().Name.IndexOf(">")]);
+                            maxAttemptCount,
+                            action.GetMethodInfo().Name[1..action.GetMethodInfo().Name.IndexOf(">")]);
                     }
 
                     exceptions.Add(ex);
