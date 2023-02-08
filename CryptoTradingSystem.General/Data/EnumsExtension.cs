@@ -12,7 +12,7 @@ namespace CryptoTradingSystem.General.Data
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string GetStringValue(this Enum value)
+        public static string? GetStringValue(this Enum value)
         {
             var type = value.GetType();
 

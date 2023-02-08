@@ -5,11 +5,11 @@ namespace CryptoTradingSystem.General.Database.Models
 {
     public class Indicator
     {
-        public string AssetName { get; set; }
-        public string Interval { get; set; }
+        public string? AssetName { get; set; }
+        public string? Interval { get; set; }
         public DateTime OpenTime { get; set; }
         public DateTime CloseTime { get; set; }
         [NotMapped]
-        public Asset Asset { get; set; }
+        public Asset? Asset { get; set; }
     }
 }

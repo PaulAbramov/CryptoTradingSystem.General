@@ -18,7 +18,7 @@ namespace CryptoTradingSystem.General.Helper
             }, retryInterval, maxAttemptCount);
         }
 
-        public static T Do<T>(Func<T> action, TimeSpan retryInterval, int maxAttemptCount = 10)
+        public static T? Do<T>(Func<T?> action, TimeSpan retryInterval, int maxAttemptCount = 10)
         {
             var exceptions = new List<Exception>();
 
@@ -41,7 +41,7 @@ namespace CryptoTradingSystem.General.Helper
                             "Run {attempt}/{maxAttempts} failed. action: {action}.", 
                             attempted + 1,
                             maxAttemptCount,
-                            action.GetMethodInfo().Name[1..action.GetMethodInfo().Name.IndexOf(">")]);
+                            action.GetMethodInfo().Name[1..action.GetMethodInfo().Name.IndexOf(">", StringComparison.Ordinal)]);
                     }
                     else
                     {
@@ -50,7 +50,7 @@ namespace CryptoTradingSystem.General.Helper
                             "Run {attempt}/{maxAttempts} failed. action: {action}.",
                             attempted + 1,
                             maxAttemptCount,
-                            action.GetMethodInfo().Name[1..action.GetMethodInfo().Name.IndexOf(">")]);
+                            action.GetMethodInfo().Name[1..action.GetMethodInfo().Name.IndexOf(">", StringComparison.Ordinal)]);
                     }
 
                     exceptions.Add(ex);

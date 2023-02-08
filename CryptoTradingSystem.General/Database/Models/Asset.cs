@@ -5,8 +5,8 @@ namespace CryptoTradingSystem.General.Database.Models
 {
     public class Asset
     {
-        public string AssetName { get; set; }
-        public string Interval { get; set; }
+        public string? AssetName { get; set; }
+        public string? Interval { get; set; }
         public DateTime OpenTime { get; set; }
         public decimal CandleOpen { get; set; }
         public decimal CandleHigh { get; set; }
@@ -19,10 +19,10 @@ namespace CryptoTradingSystem.General.Database.Models
         public decimal TakerBuyBaseAssetVolume { get; set; }
         public decimal TakerBuyQuoteAssetVolume { get; set; }
         [NotMapped]
-        public EMA Ema { get; set; }
+        public EMA? Ema { get; set; }
         [NotMapped]
-        public SMA Sma { get; set; }
+        public SMA? Sma { get; set; }
         [NotMapped]
-        public ATR Atr { get; set; }
+        public ATR? Atr { get; set; }
     }
 }

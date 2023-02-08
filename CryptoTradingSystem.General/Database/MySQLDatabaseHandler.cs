@@ -75,14 +75,14 @@ namespace CryptoTradingSystem.General.Database
                 // Translate timeframe here to do date checks later on
                 case Enums.TimeFrames.M5:
                 case Enums.TimeFrames.M15:
-                    parsedTimeFrame = TimeSpan.FromMinutes(Convert.ToDouble(timeFrame.GetStringValue().Trim('m')));
+                    parsedTimeFrame = TimeSpan.FromMinutes(Convert.ToDouble(timeFrame.GetStringValue()?.Trim('m')));
                     break;
                 case Enums.TimeFrames.H1:
                 case Enums.TimeFrames.H4:
-                    parsedTimeFrame = TimeSpan.FromHours(Convert.ToDouble(timeFrame.GetStringValue().Trim('h')));
+                    parsedTimeFrame = TimeSpan.FromHours(Convert.ToDouble(timeFrame.GetStringValue()?.Trim('h')));
                     break;
                 case Enums.TimeFrames.D1:
-                    parsedTimeFrame = TimeSpan.FromDays(Convert.ToDouble(timeFrame.GetStringValue().Trim('d')));
+                    parsedTimeFrame = TimeSpan.FromDays(Convert.ToDouble(timeFrame.GetStringValue()?.Trim('d')));
                     break;
                 default:
                     Log.Warning(

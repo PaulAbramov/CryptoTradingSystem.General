@@ -7,10 +7,10 @@ namespace CryptoTradingSystem.General.Database
     {
         private readonly string _connectionString;
 
-        public DbSet<Asset> Assets { get; set; }
-        public DbSet<EMA> EMAs { get; set; }
-        public DbSet<SMA> SMAs { get; set; }
-        public DbSet<ATR> ATRs { get; set; }
+        public DbSet<Asset>? Assets { get; set; }
+        public DbSet<EMA>? EMAs { get; set; }
+        public DbSet<SMA>? SMAs { get; set; }
+        public DbSet<ATR>? ATRs { get; set; }
 
         public CryptoTradingSystemContext(string connectionString)
         {
