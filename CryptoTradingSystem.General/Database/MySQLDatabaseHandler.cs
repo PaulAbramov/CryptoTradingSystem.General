@@ -40,17 +40,33 @@ namespace CryptoTradingSystem.General.Database
         /// <param name="_lastCloseTime"></param>
         /// <param name="_amount"></param>
         /// <returns></returns>
-        public List<T> GetIndicators<T>(
+        public IEnumerable<T> GetIndicators<T>(
             Enums.Assets _asset,
             Enums.TimeFrames _timeFrame,
             Enums.Indicators _indicator,
-            DateTime _lastCloseTime = new DateTime(),
-            int _amount = 500)
+            DateTime _firstCloseTime = new DateTime(),
+            DateTime _lastCloseTime = new DateTime())
             where T : Indicator
         {
-            var returnList = new List<T>();
+            Log.Debug("passed parameters " +
+                "| asset: {asset} " +
+                "| timeframe: {timeFrame} " +
+                "| indicator: {indicator} " +
+                "| firstclosetime: {lastCloseTime} " +
+                "| lastclosetime: {lastCloseTime} ", 
+                _asset.GetStringValue(), 
+                _timeFrame.GetStringValue(),
+                _indicator.GetStringValue(),
+                _firstCloseTime,
+                _lastCloseTime);
+
             int currentYear = DateTime.Now.Year;
             int currentMonth = DateTime.Now.Month;
+
+            if (_firstCloseTime == DateTime.MinValue)
+            {
+                _firstCloseTime = DateTime.MaxValue;
+            }
 
             TimeSpan timeFrame;
 
@@ -70,80 +86,47 @@ namespace CryptoTradingSystem.General.Database
             else
             {
                 Log.Warning(
-                    "{asset} | {timeFrame} | {indicator} | {lastClose} | timeframe could not be translated",
+                    "{asset} | {timeFrame} | {indicator} | {firstClose} | {lastClose} | timeframe could not be translated",
                     _asset.GetStringValue(),
                     _timeFrame.GetStringValue(),
                     _indicator.GetStringValue(),
+                    _firstCloseTime,
                     _lastCloseTime);
 
-                return returnList;
+                return Enumerable.Empty<T>();
             }
 
             try
             {
                 using var contextDB = new CryptoTradingSystemContext(connectionString);
 
-                var properties = typeof(CryptoTradingSystemContext).GetProperties();
+                var property = typeof(CryptoTradingSystemContext).GetProperty($"{_indicator.GetStringValue()}s");
 
-                foreach (var property in properties)
-                {
-                    if (!property.Name.Equals($"{_indicator.GetStringValue()}s"))
-                    {
-                        continue;
-                    }
+                Log.Debug("{propertyName} does match {indicator}", property.Name, _indicator.GetStringValue());
 
-                    var dbset = (DbSet<T>)property.GetValue(contextDB);
+                var dbset = (DbSet<T>)property.GetValue(contextDB);
 
-                    var indicatorsToCheck = dbset
-                        .Where(x => x.AssetName == _asset.GetStringValue() && x.Interval == _timeFrame.GetStringValue() && x.CloseTime >= _lastCloseTime)
-                        .OrderBy(x => x.CloseTime)
-                        .Take(_amount);
+                var indicators = dbset
+                    .Where(x => x.AssetName == _asset.GetStringValue()
+                        && x.Interval == _timeFrame.GetStringValue()
+                        && x.CloseTime <= _firstCloseTime
+                        && x.CloseTime >= _lastCloseTime)
+                    .OrderBy(x => x.CloseTime).AsEnumerable();
 
-                    DateTime previousCandle = DateTime.MinValue;
-                    foreach (var indicator in indicatorsToCheck)
-                    {
-                        // If we do have a previous candle, check if the difference from the current to the previous one is above the timeframe we are looking for
-                        // If so, then it is a gap and then check if the gap is towards the current Year and Month, this is where we can be sure, that the data is not complete yet.
-                        // Break here then, so we can do a new request and get the new incoming data
-                        if (previousCandle != DateTime.MinValue)
-                        {
-                            bool gap = (indicator.CloseTime - previousCandle) > timeFrame;
-                            if (gap 
-                                && indicator.CloseTime.Year == currentYear 
-                                && indicator.CloseTime.Month == currentMonth 
-                                && (previousCandle.Year != currentYear || previousCandle.Month != currentMonth))
-                            {
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            // Do not allow to calculate indicators if we do not have data from the past
-                            if (indicator.CloseTime.Year == currentYear 
-                                && (indicator.CloseTime.Month == currentMonth || indicator.CloseTime.Month == currentMonth - 1))
-                            {
-                                break;
-                            }
-                        }
-
-                        returnList.Add(indicator);
-                    }
-
-                    break;
-                }
+                return indicators.ToList();
             }
             catch (Exception e)
             {
                 Log.Error(
-                    "{asset} | {timeFrame} | {indicator} | {lastClose} | could not get candles from Database", 
+                    e,
+                    "{asset} | {timeFrame} | {indicator} | {firstClose} | {lastClose} | could not get candles from Database", 
                     _asset.GetStringValue(), 
                     _timeFrame.GetStringValue(), 
-                    _indicator.GetStringValue(), 
+                    _indicator.GetStringValue(),
+                    _firstCloseTime,
                     _lastCloseTime);
                 throw;
             }
-
-            return returnList;
         }
     }
 }

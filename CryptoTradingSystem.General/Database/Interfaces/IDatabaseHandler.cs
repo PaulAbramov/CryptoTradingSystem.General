@@ -7,6 +7,12 @@ namespace CryptoTradingSystem.General.Database.Interfaces
 {
     public interface IDatabaseHandler
     {
-        List<T> GetIndicators<T>(Enums.Assets _asset, Enums.TimeFrames _timeFrame, Enums.Indicators _indicator, DateTime _lastCloseTime = new DateTime(), int _amount = 500) where T : Indicator;
+        IEnumerable<T> GetIndicators<T>(
+            Enums.Assets _asset, 
+            Enums.TimeFrames _timeFrame, 
+            Enums.Indicators _indicator, 
+            DateTime _firstCloseTime = new DateTime(), 
+            DateTime _lastCloseTime = new DateTime()) 
+            where T : Indicator;
     }
 }
