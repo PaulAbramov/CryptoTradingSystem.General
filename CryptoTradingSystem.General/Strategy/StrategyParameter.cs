@@ -17,13 +17,13 @@ namespace CryptoTradingSystem.General.Strategy
         public DateTime? TimeFrameEnd { get; private set; }
 
         public StrategyParameter(
-            List<Tuple<Enums.TimeFrames, Enums.Assets, Enums.Indicators>> _assets, 
-            DateTime? _timeFrameStart,
-            DateTime? _timeFrameEnd)
+            List<Tuple<Enums.TimeFrames, Enums.Assets, Enums.Indicators>> assets, 
+            DateTime? timeFrameStart,
+            DateTime? timeFrameEnd)
         {
-            Assets = _assets;
-            TimeFrameStart = _timeFrameStart;
-            TimeFrameEnd = _timeFrameEnd;
+            Assets = assets;
+            TimeFrameStart = timeFrameStart;
+            TimeFrameEnd = timeFrameEnd;
         }
     }
 }

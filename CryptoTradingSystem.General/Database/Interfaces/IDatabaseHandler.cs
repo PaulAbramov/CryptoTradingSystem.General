@@ -8,11 +8,11 @@ namespace CryptoTradingSystem.General.Database.Interfaces
     public interface IDatabaseHandler
     {
         IEnumerable<T> GetIndicators<T>(
-            Enums.Assets _asset, 
-            Enums.TimeFrames _timeFrame, 
-            Enums.Indicators _indicator, 
-            DateTime _firstCloseTime = new DateTime(), 
-            DateTime _lastCloseTime = new DateTime()) 
+            Enums.Assets asset, 
+            Enums.TimeFrames timeFrame, 
+            Enums.Indicators indicator, 
+            DateTime firstCloseTime = new DateTime(), 
+            DateTime lastCloseTime = new DateTime()) 
             where T : Indicator;
     }
 }

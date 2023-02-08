@@ -14,7 +14,7 @@ namespace CryptoTradingSystem.General.Database
 {
     public class MySQLDatabaseHandler : IDatabaseHandler
     {
-        private string connectionString;
+        private readonly string _connectionString;
 
         static MySQLDatabaseHandler()
         {
@@ -25,27 +25,27 @@ namespace CryptoTradingSystem.General.Database
                 .CreateLogger();
         }
 
-        public MySQLDatabaseHandler(string _connectionString)
+        public MySQLDatabaseHandler(string connectionString)
         {
-            connectionString = _connectionString;
+            _connectionString = connectionString;
         }
 
         /// <summary>
         /// return indicator 
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="_asset"></param>
-        /// <param name="_timeFrame"></param>
-        /// <param name="_indicator"></param>
-        /// <param name="_lastCloseTime"></param>
-        /// <param name="_amount"></param>
+        /// <param name="asset"></param>
+        /// <param name="timeFrame"></param>
+        /// <param name="indicator"></param>
+        /// <param name="firstCloseTime"></param>
+        /// <param name="lastCloseTime"></param>
         /// <returns></returns>
         public IEnumerable<T> GetIndicators<T>(
-            Enums.Assets _asset,
-            Enums.TimeFrames _timeFrame,
-            Enums.Indicators _indicator,
-            DateTime _firstCloseTime = new DateTime(),
-            DateTime _lastCloseTime = new DateTime())
+            Enums.Assets asset,
+            Enums.TimeFrames timeFrame,
+            Enums.Indicators indicator,
+            DateTime firstCloseTime = new DateTime(),
+            DateTime lastCloseTime = new DateTime())
             where T : Indicator
         {
             Log.Debug("passed parameters " +
@@ -54,79 +54,87 @@ namespace CryptoTradingSystem.General.Database
                 "| indicator: {indicator} " +
                 "| firstclosetime: {lastCloseTime} " +
                 "| lastclosetime: {lastCloseTime} ", 
-                _asset.GetStringValue(), 
-                _timeFrame.GetStringValue(),
-                _indicator.GetStringValue(),
-                _firstCloseTime,
-                _lastCloseTime);
+                asset.GetStringValue(), 
+                timeFrame.GetStringValue(),
+                indicator.GetStringValue(),
+                firstCloseTime,
+                lastCloseTime);
 
-            int currentYear = DateTime.Now.Year;
-            int currentMonth = DateTime.Now.Month;
+            var currentYear = DateTime.Now.Year;
+            var currentMonth = DateTime.Now.Month;
 
-            if (_firstCloseTime == DateTime.MinValue)
+            if (firstCloseTime == DateTime.MinValue)
             {
-                _firstCloseTime = DateTime.MaxValue;
+                firstCloseTime = DateTime.MaxValue;
             }
 
-            TimeSpan timeFrame;
+            TimeSpan parsedTimeFrame;
 
-            // Translate timeframe here to do date checks later on
-            if (_timeFrame is Enums.TimeFrames.M5 || _timeFrame is Enums.TimeFrames.M15)
+            switch (timeFrame)
             {
-                timeFrame = TimeSpan.FromMinutes(Convert.ToDouble(_timeFrame.GetStringValue().Trim('m')));
-            }
-            else if (_timeFrame is Enums.TimeFrames.H1 || _timeFrame is Enums.TimeFrames.H4)
-            {
-                timeFrame = TimeSpan.FromHours(Convert.ToDouble(_timeFrame.GetStringValue().Trim('h')));
-            }
-            else if (_timeFrame is Enums.TimeFrames.D1)
-            {
-                timeFrame = TimeSpan.FromDays(Convert.ToDouble(_timeFrame.GetStringValue().Trim('d')));
-            }
-            else
-            {
-                Log.Warning(
-                    "{asset} | {timeFrame} | {indicator} | {firstClose} | {lastClose} | timeframe could not be translated",
-                    _asset.GetStringValue(),
-                    _timeFrame.GetStringValue(),
-                    _indicator.GetStringValue(),
-                    _firstCloseTime,
-                    _lastCloseTime);
+                // Translate timeframe here to do date checks later on
+                case Enums.TimeFrames.M5:
+                case Enums.TimeFrames.M15:
+                    parsedTimeFrame = TimeSpan.FromMinutes(Convert.ToDouble(timeFrame.GetStringValue().Trim('m')));
+                    break;
+                case Enums.TimeFrames.H1:
+                case Enums.TimeFrames.H4:
+                    parsedTimeFrame = TimeSpan.FromHours(Convert.ToDouble(timeFrame.GetStringValue().Trim('h')));
+                    break;
+                case Enums.TimeFrames.D1:
+                    parsedTimeFrame = TimeSpan.FromDays(Convert.ToDouble(timeFrame.GetStringValue().Trim('d')));
+                    break;
+                default:
+                    Log.Warning(
+                        "{asset} | {timeFrame} | {indicator} | {firstClose} | {lastClose} | timeframe could not be translated",
+                        asset.GetStringValue(),
+                        timeFrame.GetStringValue(),
+                        indicator.GetStringValue(),
+                        firstCloseTime,
+                        lastCloseTime);
 
-                return Enumerable.Empty<T>();
+                    return Enumerable.Empty<T>();
             }
 
             try
             {
-                using var contextDB = new CryptoTradingSystemContext(connectionString);
+                using var contextDB = new CryptoTradingSystemContext(_connectionString);
 
-                var property = typeof(CryptoTradingSystemContext).GetProperty($"{_indicator.GetStringValue()}s");
+                var property = typeof(CryptoTradingSystemContext).GetProperty($"{indicator.GetStringValue()}s");
 
-                Log.Debug("{propertyName} does match {indicator}", property.Name, _indicator.GetStringValue());
+                if (property != null)
+                {
+                    Log.Debug("{propertyName} does match {indicator}", property.Name, indicator.GetStringValue());
 
-                var dbset = (DbSet<T>)property.GetValue(contextDB);
+                    var dbset = (DbSet<T>)property.GetValue(contextDB);
 
-                var indicators = dbset
-                    .Where(x => x.AssetName == _asset.GetStringValue()
-                        && x.Interval == _timeFrame.GetStringValue()
-                        && x.CloseTime <= _firstCloseTime
-                        && x.CloseTime >= _lastCloseTime)
-                    .OrderBy(x => x.CloseTime).AsEnumerable();
+                    if (dbset != null)
+                    {
+                        var indicators = dbset
+                            .Where(x => x.AssetName == asset.GetStringValue()
+                                        && x.Interval == timeFrame.GetStringValue()
+                                        && x.CloseTime <= firstCloseTime
+                                        && x.CloseTime >= lastCloseTime)
+                            .OrderBy(x => x.CloseTime).AsEnumerable();
 
-                return indicators.ToList();
+                        return indicators.ToList();
+                    }
+                }
             }
             catch (Exception e)
             {
                 Log.Error(
                     e,
                     "{asset} | {timeFrame} | {indicator} | {firstClose} | {lastClose} | could not get candles from Database", 
-                    _asset.GetStringValue(), 
-                    _timeFrame.GetStringValue(), 
-                    _indicator.GetStringValue(),
-                    _firstCloseTime,
-                    _lastCloseTime);
+                    asset.GetStringValue(), 
+                    timeFrame.GetStringValue(), 
+                    indicator.GetStringValue(),
+                    firstCloseTime,
+                    lastCloseTime);
                 throw;
             }
+
+            return Enumerable.Empty<T>();
         }
     }
 }
