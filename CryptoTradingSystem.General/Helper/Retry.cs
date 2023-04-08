@@ -22,7 +22,7 @@ namespace CryptoTradingSystem.General.Helper
         {
             var exceptions = new List<Exception>();
 
-            for (int attempted = 0; attempted < maxAttemptCount; attempted++)
+            for (var attempted = 0; attempted < maxAttemptCount; attempted++)
             {
                 try
                 {

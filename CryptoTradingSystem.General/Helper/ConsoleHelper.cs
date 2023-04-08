@@ -6,10 +6,10 @@ namespace CryptoTradingSystem.General.Helper
     {
         public static void ClearCurrentConsoleLine()
         {
-            int currentLineCursor = Console.CursorTop;
+            var currentLineCursor = Console.CursorTop;
             Console.SetCursorPosition(0, Console.CursorTop);
 
-            for (int i = 0; i < Console.WindowWidth; i++)
+            for (var i = 0; i < Console.WindowWidth; i++)
             {
                 Console.Write(" ");
             }
