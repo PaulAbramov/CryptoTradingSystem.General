@@ -1,8 +1,11 @@
-﻿namespace CryptoTradingSystem.General.Strategy
+﻿using System.Collections.Generic;
+using CryptoTradingSystem.General.Database.Models;
+
+namespace CryptoTradingSystem.General.Strategy
 {
     public interface IStrategy
     {
         StrategyParameter SetupStrategyParameter();
-        string ExecuteStrategy();
+        string ExecuteStrategy(List<List<Indicator>> indicators);
     }
 }

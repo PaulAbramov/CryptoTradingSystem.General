@@ -11,13 +11,13 @@ namespace CryptoTradingSystem.General.Strategy
     /// </summary>
     public struct StrategyParameter
     {
-        public List<Tuple<Enums.TimeFrames, Enums.Assets, Enums.Indicators>> Assets { get; private set; }
+        public List<Tuple<Enums.TimeFrames, Enums.Assets, Type>> Assets { get; private set; }
 
         public DateTime? TimeFrameStart { get; private set; }
         public DateTime? TimeFrameEnd { get; private set; }
 
         public StrategyParameter(
-            List<Tuple<Enums.TimeFrames, Enums.Assets, Enums.Indicators>> assets, 
+            List<Tuple<Enums.TimeFrames, Enums.Assets, Type>> assets, 
             DateTime? timeFrameStart,
             DateTime? timeFrameEnd)
         {

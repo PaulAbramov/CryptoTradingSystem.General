@@ -23,15 +23,5 @@
             [StringValue("1d")]
             D1
         }
-
-        public enum Indicators
-        {
-            [StringValue("EMA")]
-            EMA,
-            [StringValue("SMA")]
-            SMA,
-            [StringValue("ATR")]
-            ATR
-        }
     }
 }

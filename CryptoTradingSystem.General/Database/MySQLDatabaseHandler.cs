@@ -43,20 +43,20 @@ namespace CryptoTradingSystem.General.Database
         public IEnumerable<T> GetIndicators<T>(
             Enums.Assets asset,
             Enums.TimeFrames timeFrame,
-            Enums.Indicators indicator,
+            Type indicator,
             DateTime firstCloseTime = new DateTime(),
             DateTime lastCloseTime = new DateTime())
-            where T : Indicator
+            where T : Indicator 
         {
             Log.Debug("passed parameters " +
-                "| asset: {asset} " +
-                "| timeframe: {timeFrame} " +
-                "| indicator: {indicator} " +
-                "| firstclosetime: {lastCloseTime} " +
-                "| lastclosetime: {lastCloseTime} ", 
+                "| asset: {Asset} " +
+                "| timeframe: {TimeFrame} " +
+                "| indicator: {Indicator} " +
+                "| firstclosetime: {FirstCloseTime} " +
+                "| lastclosetime: {LastCloseTime} ", 
                 asset.GetStringValue(), 
                 timeFrame.GetStringValue(),
-                indicator.GetStringValue(),
+                indicator.Name,
                 firstCloseTime,
                 lastCloseTime);
 
@@ -86,28 +86,27 @@ namespace CryptoTradingSystem.General.Database
                     break;
                 default:
                     Log.Warning(
-                        "{asset} | {timeFrame} | {indicator} | {firstClose} | {lastClose} | timeframe could not be translated",
+                        "{Asset} | {TimeFrame} | {Indicator} | {FirstClose} | {LastClose} | timeframe could not be translated",
                         asset.GetStringValue(),
                         timeFrame.GetStringValue(),
-                        indicator.GetStringValue(),
+                        indicator.Name,
                         firstCloseTime,
                         lastCloseTime);
 
-                    return Enumerable.Empty<T>();
+                    return Enumerable.Empty<T>().ToList();
             }
 
             try
             {
-                using var contextDB = new CryptoTradingSystemContext(_connectionString);
+                using var contextDb = new CryptoTradingSystemContext(_connectionString);
 
-                var property = typeof(CryptoTradingSystemContext).GetProperty($"{indicator.GetStringValue()}s");
+                var property = typeof(CryptoTradingSystemContext).GetProperty($"{indicator.Name}s");
 
                 if (property != null)
                 {
-                    Log.Debug("{propertyName} does match {indicator}", property.Name, indicator.GetStringValue());
+                    Log.Debug("{PropertyName} does match {Indicator}", property.Name, indicator.Name);
 
-                    var dbset = (DbSet<T>)property.GetValue(contextDB);
-
+                    var dbset = (DbSet<T>)property.GetValue(contextDb);
                     if (dbset != null)
                     {
                         var indicators = dbset
@@ -125,16 +124,16 @@ namespace CryptoTradingSystem.General.Database
             {
                 Log.Error(
                     e,
-                    "{asset} | {timeFrame} | {indicator} | {firstClose} | {lastClose} | could not get candles from Database", 
+                    "{Asset} | {TimeFrame} | {Indicator} | {FirstClose} | {LastClose} | could not get candles from Database", 
                     asset.GetStringValue(), 
                     timeFrame.GetStringValue(), 
-                    indicator.GetStringValue(),
+                    indicator.Name,
                     firstCloseTime,
                     lastCloseTime);
                 throw;
             }
 
-            return Enumerable.Empty<T>();
+            return Enumerable.Empty<T>().ToList();
         }
     }
 }
