@@ -23,5 +23,23 @@
             [StringValue("1d")]
             D1
         }
+        
+        public enum TradeStatus
+        {
+            [StringValue("Open")]
+            Open,
+            [StringValue("Closed")]
+            Closed
+        }
+        
+        public enum TradeType
+        {
+            [StringValue("None")]
+            None,
+            [StringValue("Buy")]
+            Buy,
+            [StringValue("Sell")]
+            Sell
+        }
     }
 }

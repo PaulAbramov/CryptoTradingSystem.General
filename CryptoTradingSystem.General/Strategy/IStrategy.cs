@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CryptoTradingSystem.General.Data;
 using CryptoTradingSystem.General.Database.Models;
 
 namespace CryptoTradingSystem.General.Strategy
@@ -6,6 +7,6 @@ namespace CryptoTradingSystem.General.Strategy
     public interface IStrategy
     {
         StrategyParameter SetupStrategyParameter();
-        string ExecuteStrategy(List<List<Indicator>> indicators);
+        Enums.TradeType ExecuteStrategy(List<Indicator> indicators, Enums.TradeStatus status);
     }
 }
