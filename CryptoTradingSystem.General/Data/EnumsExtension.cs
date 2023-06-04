@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 
 namespace CryptoTradingSystem.General.Data
@@ -11,7 +12,6 @@ namespace CryptoTradingSystem.General.Data
         /// the items in your enum.
         /// </summary>
         /// <param name="value"></param>
-        /// <returns></returns>
         public static string? GetStringValue(this Enum value)
         {
             var type = value.GetType();
@@ -24,6 +24,27 @@ namespace CryptoTradingSystem.General.Data
 
             // Return the first if there was a match.
             return attribs is { Length: > 0 } ? attribs[0].StringValue : null;
+        }
+        
+        public static T Next<T>(this T v) where T : struct
+        {
+            return Enum.GetValues(v.GetType())
+                .Cast<T>()
+                .Concat(new[] { default(T) })
+                .SkipWhile(e => !v.Equals(e))
+                .Skip(1)
+                .First();
+        }
+
+        public static T Previous<T>(this T v) where T : struct
+        {
+            return Enum.GetValues(v.GetType())
+                .Cast<T>()
+                .Concat(new[] { default(T) })
+                .Reverse()
+                .SkipWhile(e => !v.Equals(e))
+                .Skip(1)
+                .First();
         }
     }
 }
