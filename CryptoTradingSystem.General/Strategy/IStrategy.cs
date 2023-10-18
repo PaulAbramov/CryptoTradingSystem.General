@@ -7,6 +7,6 @@ namespace CryptoTradingSystem.General.Strategy
     public interface IStrategy
     {
         StrategyParameter SetupStrategyParameter();
-        Enums.TradeType ExecuteStrategy(List<Indicator> indicators, Enums.TradeStatus status);
+        StrategyReturnParameter ExecuteStrategy(List<Indicator> indicators, Enums.TradeStatus status);
     }
 }
