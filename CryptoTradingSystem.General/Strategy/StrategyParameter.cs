@@ -1,7 +1,6 @@
-﻿using System;
+﻿using CryptoTradingSystem.General.Data;
+using System;
 using System.Collections.Generic;
-
-using CryptoTradingSystem.General.Data;
 
 namespace CryptoTradingSystem.General.Strategy
 {
@@ -17,7 +16,7 @@ namespace CryptoTradingSystem.General.Strategy
         public DateTime? TimeFrameEnd { get; set; }
 
         public StrategyParameter(
-            List<Tuple<Enums.TimeFrames, Enums.Assets, Type>> assets, 
+            List<Tuple<Enums.TimeFrames, Enums.Assets, Type>> assets,
             Enums.Assets assetToBuy,
             DateTime? timeFrameStart,
             DateTime? timeFrameEnd)
