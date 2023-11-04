@@ -26,6 +26,8 @@
         
         public enum TradeStatus
         {
+            [StringValue("None")]
+            None,
             [StringValue("Open")]
             Open,
             [StringValue("Closed")]
@@ -40,6 +42,18 @@
             Buy,
             [StringValue("Sell")]
             Sell
+        }
+        
+        public enum StrategyState
+        {
+            [StringValue("None")]
+            None,
+            [StringValue("Backtesting")]
+            Backtesting,
+            [StringValue("Validating")]
+            Validating,
+            [StringValue("Live-Trading")]
+            LiveTrading,
         }
     }
 }

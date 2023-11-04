@@ -6,6 +6,7 @@ public struct StrategyReturnParameter
 {
     public Enums.TradeType TradeType { get; set; }
     public Enums.TradeStatus TradeStatus { get; set; }
+    public Enums.StrategyState StrategyState { get; set; }
     public double? StopLossPercentage { get; set; }
     public double? TakeProfitPercentage { get; set; }
 

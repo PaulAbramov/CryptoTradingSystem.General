@@ -1,18 +1,13 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CryptoTradingSystem.General.Database.Models
 {
-    public class Asset
+    public class Asset : AssetBase
     {
-        public string? AssetName { get; set; }
-        public string? Interval { get; set; }
-        public DateTime OpenTime { get; set; }
         public decimal CandleOpen { get; set; }
         public decimal CandleHigh { get; set; }
         public decimal CandleLow { get; set; }
         public decimal CandleClose { get; set; }
-        public DateTime CloseTime { get; set; }
         public decimal Volume { get; set; }
         public decimal QuoteAssetVolume { get; set; }
         public long Trades { get; set; }
@@ -24,5 +19,7 @@ namespace CryptoTradingSystem.General.Database.Models
         public SMA? Sma { get; set; }
         [NotMapped]
         public ATR? Atr { get; set; }
+        [NotMapped]
+        public AssetAdditionalInformation? AdditionalInformation { get; set; }
     }
 }

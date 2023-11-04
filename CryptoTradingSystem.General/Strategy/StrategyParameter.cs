@@ -14,17 +14,19 @@ namespace CryptoTradingSystem.General.Strategy
         public Enums.Assets AssetToBuy { get; private set; }
         public DateTime? TimeFrameStart { get; set; }
         public DateTime? TimeFrameEnd { get; set; }
+        public StrategyApprovementStatistics StrategyApprovementStatistics { get; set; }
 
         public StrategyParameter(
             List<Tuple<Enums.TimeFrames, Enums.Assets, Type>> assets,
             Enums.Assets assetToBuy,
             DateTime? timeFrameStart,
-            DateTime? timeFrameEnd)
+            DateTime? timeFrameEnd, StrategyApprovementStatistics strategyApprovementStatistics)
         {
             Assets = assets;
             AssetToBuy = assetToBuy;
             TimeFrameStart = timeFrameStart;
             TimeFrameEnd = timeFrameEnd;
+            StrategyApprovementStatistics = strategyApprovementStatistics;
         }
     }
 }

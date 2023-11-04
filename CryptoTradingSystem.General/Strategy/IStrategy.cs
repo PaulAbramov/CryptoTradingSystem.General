@@ -6,7 +6,11 @@ namespace CryptoTradingSystem.General.Strategy
 {
     public interface IStrategy
     {
+        StrategyStatistics Statistics { get; set; }
+        
         StrategyParameter SetupStrategyParameter();
-        StrategyReturnParameter ExecuteStrategy(List<Indicator> indicators, Enums.TradeStatus status);
+        StrategyReturnParameter ExecuteStrategy(List<Indicator> indicators, decimal price);
+
+        void CalculateStatistics(decimal candleClose, Enums.TradeType tradeType);
     }
 }

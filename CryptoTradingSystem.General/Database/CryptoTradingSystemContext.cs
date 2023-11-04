@@ -11,6 +11,7 @@ namespace CryptoTradingSystem.General.Database
         public DbSet<EMA>? EMAs { get; set; }
         public DbSet<SMA>? SMAs { get; set; }
         public DbSet<ATR>? ATRs { get; set; }
+        public DbSet<AssetAdditionalInformation> AssetAdditionalInformations { get; set; }
 
         public CryptoTradingSystemContext(string connectionString)
         {
@@ -47,6 +48,7 @@ namespace CryptoTradingSystem.General.Database
                 entity.Ignore(e => e.Ema);
                 entity.Ignore(e => e.Sma);
                 entity.Ignore(e => e.Atr);
+                entity.Ignore(e => e.AdditionalInformation);
 
                 entity.HasOne(e => e.Ema).WithOne(ema => ema.Asset)
                     .HasForeignKey<EMA>(ema => new { ema.AssetName, ema.Interval, ema.OpenTime, ema.CloseTime });
@@ -56,6 +58,9 @@ namespace CryptoTradingSystem.General.Database
 
                 entity.HasOne(e => e.Atr).WithOne(atr => atr.Asset)
                     .HasForeignKey<ATR>(atr => new { atr.AssetName, atr.Interval, atr.OpenTime, atr.CloseTime });
+
+                entity.HasOne(e => e.AdditionalInformation).WithOne(additionalInfo => additionalInfo.Asset)
+                    .HasForeignKey<AssetAdditionalInformation>(additionalInfo => new { additionalInfo.AssetName, additionalInfo.Interval, additionalInfo.OpenTime, additionalInfo.CloseTime });
             });
 
             modelBuilder.Entity<EMA>(entity =>
@@ -89,6 +94,14 @@ namespace CryptoTradingSystem.General.Database
             modelBuilder.Entity<ATR>(entity =>
             {
                 entity.Property(e => e.ATR14).HasColumnType("decimal(28,8)");
+
+                entity.HasKey(e => new { e.AssetName, e.Interval, e.OpenTime, e.CloseTime });
+            });
+
+            modelBuilder.Entity<AssetAdditionalInformation>(entity =>
+            {
+                entity.Property(e => e.ReturnToLastCandle).HasColumnType("decimal(28,8)");
+                entity.Property(e => e.ReturnToLastCandleInPercentage).HasColumnType("decimal(28,8)");
 
                 entity.HasKey(e => new { e.AssetName, e.Interval, e.OpenTime, e.CloseTime });
             });
