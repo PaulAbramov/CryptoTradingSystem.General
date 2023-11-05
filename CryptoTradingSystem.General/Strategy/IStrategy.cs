@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
-using CryptoTradingSystem.General.Data;
+﻿using CryptoTradingSystem.General.Data;
 using CryptoTradingSystem.General.Database.Models;
+using System.Collections.Generic;
 
-namespace CryptoTradingSystem.General.Strategy
+namespace CryptoTradingSystem.General.Strategy;
+
+public interface IStrategy
 {
-    public interface IStrategy
-    {
-        StrategyStatistics Statistics { get; set; }
-        
-        StrategyParameter SetupStrategyParameter();
-        StrategyReturnParameter ExecuteStrategy(List<Indicator> indicators, decimal price);
+	StrategyStatistics Statistics { get; set; }
 
-        void CalculateStatistics(decimal candleClose, Enums.TradeType tradeType);
-    }
+	StrategyParameter SetupStrategyParameter();
+	StrategyReturnParameter ExecuteStrategy(List<Indicator> indicators, decimal price);
+
+	void CalculateStatistics(decimal candleClose, Enums.TradeType tradeType);
 }

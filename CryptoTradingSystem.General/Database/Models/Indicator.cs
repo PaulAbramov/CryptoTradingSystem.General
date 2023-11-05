@@ -1,6 +1,5 @@
-﻿namespace CryptoTradingSystem.General.Database.Models
+﻿namespace CryptoTradingSystem.General.Database.Models;
+
+public class Indicator : AssetBase
 {
-    public class Indicator : AssetBase
-    {
-    }
 }

@@ -1,7 +1,6 @@
-﻿namespace CryptoTradingSystem.General.Database.Models
+﻿namespace CryptoTradingSystem.General.Database.Models;
+
+public class ATR : Indicator
 {
-    public class ATR : Indicator
-    {
-        public decimal? ATR14 { get; set; }
-    }
+	public decimal? ATR14 { get; set; }
 }

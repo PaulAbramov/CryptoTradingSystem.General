@@ -1,8 +1,7 @@
-﻿namespace CryptoTradingSystem.General.Database.Models
+﻿namespace CryptoTradingSystem.General.Database.Models;
+
+public class AssetAdditionalInformation : AssetBase
 {
-    public class AssetAdditionalInformation : AssetBase
-    {
-        public decimal? ReturnToLastCandle { get; set; }
-        public decimal? ReturnToLastCandleInPercentage { get; set; }
-    }
+	public decimal? ReturnToLastCandle { get; set; }
+	public decimal? ReturnToLastCandleInPercentage { get; set; }
 }
