@@ -4,7 +4,7 @@ namespace CryptoTradingSystem.General.Strategy;
 
 public class StrategyApprovementStatistics
 {
-	public DateTime MinimalValidationDuration { get; set; }
+	public TimeSpan MinimalValidationDuration { get; set; }
 	public decimal? ProfitLoss { get; set; }
 	public decimal? Winrate { get; set; }
 	public decimal? SharpeRatio { get; set; }
