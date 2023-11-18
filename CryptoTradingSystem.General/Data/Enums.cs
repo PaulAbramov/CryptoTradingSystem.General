@@ -10,18 +10,6 @@ public static class Enums
 		Bnbusdt
 	}
 
-	public enum StrategyState
-	{
-		[StringValue("None")]
-		None,
-		[StringValue("Backtesting")]
-		Backtesting,
-		[StringValue("Validating")]
-		Validating,
-		[StringValue("Live-Trading")]
-		LiveTrading
-	}
-
 	public enum TimeFrames
 	{
 		[StringValue("5m")]
