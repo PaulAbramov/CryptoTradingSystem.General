@@ -25,6 +25,9 @@ public class CryptoTradingSystemContext : DbContext
 		modelBuilder.Entity<Asset>(
 			entity =>
 			{
+				entity.Property(e => e.Exchange)
+					.HasMaxLength(10)
+					.IsRequired();
 				entity.Property(e => e.AssetName)
 					.HasMaxLength(10)
 					.IsRequired();
@@ -57,6 +60,7 @@ public class CryptoTradingSystemContext : DbContext
 				entity.HasKey(
 					e => new
 					{
+						e.Exchange,
 						e.AssetName,
 						e.Interval,
 						e.OpenTime,
@@ -72,6 +76,7 @@ public class CryptoTradingSystemContext : DbContext
 					.HasForeignKey<EMA>(
 						ema => new
 						{
+							ema.Exchange,
 							ema.AssetName,
 							ema.Interval,
 							ema.OpenTime,
@@ -83,6 +88,7 @@ public class CryptoTradingSystemContext : DbContext
 					.HasForeignKey<SMA>(
 						sma => new
 						{
+							sma.Exchange,
 							sma.AssetName,
 							sma.Interval,
 							sma.OpenTime,
@@ -94,6 +100,7 @@ public class CryptoTradingSystemContext : DbContext
 					.HasForeignKey<ATR>(
 						atr => new
 						{
+							atr.Exchange,
 							atr.AssetName,
 							atr.Interval,
 							atr.OpenTime,
@@ -105,6 +112,7 @@ public class CryptoTradingSystemContext : DbContext
 					.HasForeignKey<AssetAdditionalInformation>(
 						additionalInfo => new
 						{
+							additionalInfo.Exchange,
 							additionalInfo.AssetName,
 							additionalInfo.Interval,
 							additionalInfo.OpenTime,
@@ -135,6 +143,7 @@ public class CryptoTradingSystemContext : DbContext
 				entity.HasKey(
 					e => new
 					{
+						e.Exchange,
 						e.AssetName,
 						e.Interval,
 						e.OpenTime,
@@ -165,6 +174,7 @@ public class CryptoTradingSystemContext : DbContext
 				entity.HasKey(
 					e => new
 					{
+						e.Exchange,
 						e.AssetName,
 						e.Interval,
 						e.OpenTime,
@@ -181,6 +191,7 @@ public class CryptoTradingSystemContext : DbContext
 				entity.HasKey(
 					e => new
 					{
+						e.Exchange,
 						e.AssetName,
 						e.Interval,
 						e.OpenTime,
@@ -199,6 +210,7 @@ public class CryptoTradingSystemContext : DbContext
 				entity.HasKey(
 					e => new
 					{
+						e.Exchange,
 						e.AssetName,
 						e.Interval,
 						e.OpenTime,

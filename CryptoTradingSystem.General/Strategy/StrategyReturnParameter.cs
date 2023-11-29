@@ -2,7 +2,7 @@ using CryptoTradingSystem.General.Data;
 
 namespace CryptoTradingSystem.General.Strategy;
 
-public struct StrategyReturnParameter
+public class StrategyReturnParameter
 {
 	public Enums.TradeType TradeType { get; set; }
 	public Enums.TradeStatus TradeStatus { get; set; }
@@ -15,6 +15,10 @@ public struct StrategyReturnParameter
 	// !Value which moves with the price into the favorable direction and activated after a certain Take-Profit was reached
 	// !Makes sure to lock in atleast the desired Take-Profit
 	public double? TrailingTakeProfitPercentage { get; set; }
+
+	public StrategyReturnParameter()
+	{
+	}
 	
 	public StrategyReturnParameter(
 		Enums.TradeType tradeType,

@@ -2,6 +2,14 @@
 
 public static class Enums
 {
+	public enum Exchange
+	{
+		[StringValue("Binance")]
+		Binance,
+		[StringValue("Bybit")]
+		Bybit
+	}
+
 	public enum Assets
 	{
 		[StringValue("btcusdt")]

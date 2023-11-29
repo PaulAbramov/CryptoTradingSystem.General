@@ -8,7 +8,7 @@ namespace CryptoTradingSystem.General.Strategy;
 ///   Every Strategy has to fill this.
 ///   Will be returned to the Backtester to get all Data
 /// </summary>
-public struct StrategyParameter
+public class StrategyParameter
 {
 	public List<Tuple<Enums.TimeFrames, Enums.Assets, Type>> Assets { get; private set; }
 	public Enums.Assets AssetToBuy { get; private set; }

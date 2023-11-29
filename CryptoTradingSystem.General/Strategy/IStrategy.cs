@@ -7,5 +7,5 @@ namespace CryptoTradingSystem.General.Strategy;
 public interface IStrategy
 {
 	StrategyParameter SetupStrategyParameter();
-	StrategyReturnParameter ExecuteStrategy(List<Indicator> indicators, decimal price);
+	StrategyReturnParameter ExecuteStrategy(List<Indicator> indicators);
 }
